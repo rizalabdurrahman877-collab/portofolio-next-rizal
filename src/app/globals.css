@@ -5,6 +5,12 @@
   --foreground: #171717;
 }
 
+@theme {
+  --color-utama: #1D3557;
+  --color-aksen: #C1121F;
+  --color-latar: #F1FAEE;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
