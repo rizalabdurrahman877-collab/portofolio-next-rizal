@@ -2,11 +2,10 @@ export default function Footer() {
     const tahun = new Date().getFullYear();
 
     return (
-        <footer className="mt-auto border-t border-gray-200 px-4 py-5 text-center">
+        <footer className="mt-auto bg-utama p-6 text-center text-latar">
             <p className="text-sm text-gray-600">
-                &copy; {tahun} Rizal Abdurrakhman Wakhid. All rights reserved.
+                &copy; {tahun} Rizal Abdurrakhman Wakhid. Dibuat Next.js di Kelas Industri UBIG
             </p>
-
         </footer>
     );
 }

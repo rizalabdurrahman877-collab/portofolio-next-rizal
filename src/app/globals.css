@@ -1,32 +1,109 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-utama: #1D3557;
   --color-aksen: #C1121F;
   --color-latar: #F1FAEE;
+  --color-kartu: #FFFFFF;
+  --color-teks: #1F2937;
+  --color-judul: #1D3557;
+  --color-muted: #4B5563;
+  --color-garis: #E5E7EB;
+  --color-isian: #FFFFFF;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --color-latar: #0B1120;
+  --color-kartu: #1E293B;
+  --color-teks: #E2E8F0;
+  --color-judul: #BAE6FD;
+  --color-muted: #94A3B8;
+  --color-garis: #334155;
+  --color-isian: #0F172A;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ===== Mode gelap: petakan kelas warna ke warna gelap ===== */
+
+/* Latar */
+html.dark body,
+html.dark .bg-latar,
+html.dark .bg-green-50,
+html.dark .bg-gray-50,
+html.dark .bg-gray-100 {
+  background-color: #0B1120;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+html.dark .bg-white,
+html.dark .bg-kartu {
+  background-color: #1E293B;
+}
+
+html.dark .bg-isian {
+  background-color: #0F172A;
+}
+
+/* Teks utama */
+html.dark body,
+html.dark .text-teks,
+html.dark .text-gray-800,
+html.dark .text-gray-900,
+html.dark .text-gray-700 {
+  color: #E2E8F0;
+}
+
+/* Judul */
+html.dark .text-utama,
+html.dark .text-judul {
+  color: #BAE6FD;
+}
+
+/* Teks kecil / keterangan */
+html.dark .text-gray-600,
+html.dark .text-gray-500,
+html.dark .text-muted {
+  color: #94A3B8;
+}
+
+/* Link dan pesan error */
+html.dark .text-aksen {
+  color: #FCA5A5;
+}
+
+/* Garis */
+html.dark .border-gray-200,
+html.dark .border-gray-300,
+html.dark .border-garis {
+  border-color: #334155;
+}
+
+/* Input, select, textarea */
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #0F172A;
+  color: #E2E8F0;
+  border-color: #334155;
+}
+
+/* Pill / badge gelap di kartu proyek */
+html.dark .bg-gray-900,
+html.dark .bg-black {
+  background-color: #020617;
+}
+
+/* Tangkap semua kelas latar terang di mode gelap */
+html.dark [class*="bg-green-"],
+html.dark [class*="bg-emerald-"],
+html.dark [class*="bg-slate-50"],
+html.dark [class*="bg-slate-100"],
+html.dark [class*="bg-blue-50"],
+html.dark [class*="bg-sky-50"],
+html.dark [class*="bg-stone-"],
+html.dark [class*="bg-zinc-50"],
+html.dark [class*="bg-neutral-50"],
+html.dark [class*="bg-\[#F1FAEE\]"],
+html.dark [class*="bg-latar"] {
+  background-color: #0B1120 !important;
 }

@@ -1,13 +1,11 @@
 import Hero from "@/components/Hero";
 import Kartu from "@/components/Kartu";
 import SkillCard from "@/components/SkillCard";
+import { proyek } from "@/data/proyek";
+import ProyekCard from "@/components/ProyekCard";
+import Link from "next/link";
 
-const hobi = [
-  "Mancing Ikan",
-  "Coding",
-  "Bermain Bulu Tangkis",
-  "Jogging",
-];
+const hobi = ["Mancing Ikan", "Coding", "Bermain Bulu Tangkis", "Jogging"];
 
 const rencana = [
   "Menjadi Junior Web Developer",
@@ -16,8 +14,6 @@ const rencana = [
 ];
 
 const skills = [
-
-
   { nama: "HTML", level: "Menengah" },
   { nama: "CSS", level: "Menengah" },
   { nama: "Git dan Github", level: "Dasar" },
@@ -26,20 +22,18 @@ const skills = [
 ];
 
 const jadwal = [
-  { hari: "Senin", kegiatan: "Belajar HTML dan CSS" },
-  { hari: "Selasa", kegiatan: "Belajar JavaScript" },
-  { hari: "Rabu", kegiatan: "Latihan membuat website" },
-  { hari: "Kamis", kegiatan: "Belajar Next.js" },
-  { hari: "Jumat", kegiatan: "Evaluasi Proyek" },
+  { hari: "Senin", waktu: "19.00 - 20.00", kegiatan: "Belajar HTML dan CSS" },
+  { hari: "Selasa", waktu: "19.00 - 20.00", kegiatan: "Belajar JavaScript" },
+  { hari: "Rabu", waktu: "19.00 - 21.00", kegiatan: "Latihan membuat website" },
+  { hari: "Kamis", waktu: "19.00 - 20.00", kegiatan: "Belajar Next.js" },
+  { hari: "Jumat", waktu: "19.00 - 20.30", kegiatan: "Evaluasi Proyek" },
 ];
 
 export default function Home() {
-
-  const nama = "Rizal Abdurrakhman Wakhid";
-  const tahunlahir = 2009;
+  const proyekTerbaru = proyek.slice(-3);
 
   return (
-    <main className="min-h-screen bg-[#eaf8ee] px-4 py-8 md:py-10">
+    <main className="min-h-screen bg-latar px-4 py-8 md:py-10">
       <section className="mx-auto max-w-3xl">
         <Hero
           nama="Rizal Abdurrakhman Wakhid"
@@ -49,9 +43,10 @@ export default function Home() {
         <section className="mt-8 space-y-6">
           <Kartu judul="Tentang Saya">
             <p className="leading-7 text-gray-700">
-              Halo, Saya Rizal Abdurrakhman Wakhid.Saya siswa Rekayasa Perangkat Lunak di SMKN 1 Pasuruan yang
-              tertarik dengan pengembangann website dan teknologi. Saya terus belajar untuk meningkatkan kemampuan
-              pemrograman dan membuat proyek yang bermanfaat.
+              Halo, Saya Rizal Abdurrakhman Wakhid.Saya siswa Rekayasa Perangkat
+              Lunak di SMKN 1 Pasuruan yang tertarik dengan pengembangann
+              website dan teknologi. Saya terus belajar untuk meningkatkan
+              kemampuan pemrograman dan membuat proyek yang bermanfaat.
             </p>
           </Kartu>
           <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -62,7 +57,6 @@ export default function Home() {
                 ))}
               </ul>
             </Kartu>
-
 
             <Kartu judul="Cita-Cita">
               <ol className="list-decimal space-y-2 pl-5 text-gray-700">
@@ -83,6 +77,23 @@ export default function Home() {
                 />
               ))}
             </section>
+
+            <section className="mt-10">
+              <h2 className="mb-4 text-2xl font-bold text-utama">
+                Proyek Terbaru
+              </h2>
+              <div className="grid gap-6 md:grid-cols-3">
+                {proyekTerbaru.map((item) => (
+                  <ProyekCard key={item.slug} proyek={item} />
+                ))}
+              </div>
+              <Link
+                href="/proyek"
+                className="mt-6 inline-block rounded-lg bg-utama px-5 py-2 font-semibold text-white"
+              >
+                Lihat Semua Proyek
+              </Link>
+            </section>
           </Kartu>
           <Kartu judul="Jadwal Belajar">
             <section className="overflow-x-auto">
@@ -90,16 +101,15 @@ export default function Home() {
                 <thead className="bg-utama text-white">
                   <tr>
                     <th className="px-4 py-3">Hari</th>
+                    <th className="px-4 py-3">Waktu</th>
                     <th className="px-4 py-3">Kegiatan</th>
                   </tr>
                 </thead>
                 <tbody>
                   {jadwal.map((item) => (
-                    <tr
-                      key={item.hari}
-                      className="border-b border-gray-200"
-                    >
+                    <tr key={item.hari} className="border-b border-gray-200">
                       <td className="px-4 py-3">{item.hari}</td>
+                      <td className="px-4 py-3">{item.waktu}</td>
                       <td className="px-4 py-3">{item.kegiatan}</td>
                     </tr>
                   ))}
