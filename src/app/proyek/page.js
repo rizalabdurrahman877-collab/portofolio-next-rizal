@@ -3,7 +3,7 @@ import ProyekCard from "@/components/ProyekCard";
 import { proyek } from "@/data/proyek";
 
 export const metadata = {
-  title: "Proyek",
+  title: "Rizal Abdurrakhman Wakhid | Portofolio",
   description: "Daftar Proyek karya Rizal Abdurrakhman Wakhid",
 };
 

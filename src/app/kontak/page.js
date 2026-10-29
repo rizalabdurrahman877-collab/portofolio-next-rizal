@@ -1,7 +1,7 @@
 import FormKontak from "@/components/FormKontak";
 
 export const metadata = {
-  title: "Kontak",
+  title: "Rizal Abdurrakhman Wakhid | Portofolio",
   description: "Hubungi saya untuk pertanyaan atau kerja sama.",
 };
 
