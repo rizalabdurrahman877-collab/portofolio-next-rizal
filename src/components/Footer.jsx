@@ -3,8 +3,8 @@ export default function Footer() {
 
     return (
         <footer className="mt-auto bg-utama p-6 text-center text-latar">
-            <p className="text-sm text-gray-600">
-                &copy; {tahun} Rizal Abdurrakhman Wakhid. Dibuat Next.js di Kelas Industri UBIG
+            <p className="text-sm text-latar font-bold">
+                &copy; {tahun} Rizal Abdurrakhman Wakhid. All rights reserved.
             </p>
         </footer>
     );

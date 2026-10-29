@@ -41,32 +41,6 @@ export default function Home() {
         />
 
         <section className="mt-8 space-y-6">
-          <Kartu judul="Tentang Saya">
-            <p className="leading-7 text-gray-700">
-              Halo, Saya Rizal Abdurrakhman Wakhid.Saya siswa Rekayasa Perangkat
-              Lunak di SMKN 1 Pasuruan yang tertarik dengan pengembangann
-              website dan teknologi. Saya terus belajar untuk meningkatkan
-              kemampuan pemrograman dan membuat proyek yang bermanfaat.
-            </p>
-          </Kartu>
-          <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <Kartu judul="Hobi">
-              <ul className="list-disc space-y-2 pl-5 text-gray-700">
-                {hobi.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </Kartu>
-
-            <Kartu judul="Cita-Cita">
-              <ol className="list-decimal space-y-2 pl-5 text-gray-700">
-                {rencana.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ol>
-            </Kartu>
-          </section>
-
           <Kartu judul="Keahlian">
             <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {skills.map((skill) => (
@@ -77,46 +51,28 @@ export default function Home() {
                 />
               ))}
             </section>
+          </Kartu>
 
-            <section className="mt-10">
+          <section className="mt-10">
+            <div className="rounded-2xl bg-white p-6 shadow-md md:p-8">
               <h2 className="mb-4 text-2xl font-bold text-utama">
                 Proyek Terbaru
               </h2>
+
               <div className="grid gap-6 md:grid-cols-3">
                 {proyekTerbaru.map((item) => (
                   <ProyekCard key={item.slug} proyek={item} />
                 ))}
               </div>
+
               <Link
                 href="/proyek"
                 className="mt-6 inline-block rounded-lg bg-utama px-5 py-2 font-semibold text-white"
               >
                 Lihat Semua Proyek
               </Link>
-            </section>
-          </Kartu>
-          <Kartu judul="Jadwal Belajar">
-            <section className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead className="bg-utama text-white">
-                  <tr>
-                    <th className="px-4 py-3">Hari</th>
-                    <th className="px-4 py-3">Waktu</th>
-                    <th className="px-4 py-3">Kegiatan</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {jadwal.map((item) => (
-                    <tr key={item.hari} className="border-b border-gray-200">
-                      <td className="px-4 py-3">{item.hari}</td>
-                      <td className="px-4 py-3">{item.waktu}</td>
-                      <td className="px-4 py-3">{item.kegiatan}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </section>
-          </Kartu>
+            </div>
+          </section>
         </section>
       </section>
     </main>

@@ -19,7 +19,7 @@ export default function Navbar() {
         <header className="bg-utama text-white">
             <nav className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
                 <Link href="/" className="shrink-0 text-xl font-bold">
-                    Rizal Abdurrakhman Wakhid
+                    Rizal 
                 </Link>
 
                 <ul className="flex flex-wrap gap-x-6 gap-y-2">
