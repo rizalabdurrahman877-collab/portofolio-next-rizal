@@ -10,7 +10,11 @@ const kelasLabel = "block font-semibold text-teks";
 export default function FormKontak() {
   const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
+  const [hp, setHp] = useState("");
+  const [keperluan, setKeperluan] = useState("");
+  const [pesan, setPesan] = useState("");
   const [error, setError] = useState({});
+  const [berhasil, setBerhasil] = useState(false);
 
   function kirim(e) {
     e.preventDefault();
@@ -21,11 +25,24 @@ export default function FormKontak() {
       errorBaru.nama = "Nama wajib diisi.";
     }
 
-    if (!email.includes("@")) {
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
       errorBaru.email = "Email harus memuat tanda @, contoh nama@gmail.com";
     }
 
+    if (hp.length < 10) {
+      errorBaru.hp = "Nomor HP minimal 10 angka.";
+    }
+
+    if (keperluan === "") {
+      errorBaru.keperluan = "Pilih salah satu keperluan.";
+    }
+
+    if (pesan.trim().length < 10) {
+      errorBaru.pesan = "Pesan minimal 10 karakter.";
+    }
+
     setError(errorBaru);
+    setBerhasil(Object.keys(errorBaru).length === 0);
   }
 
   return (
@@ -54,7 +71,6 @@ export default function FormKontak() {
               id="nama"
               name="nama"
               placeholder="Contoh: Rizal Abdurrakhman"
-              required
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               className={kelasInput}
@@ -73,7 +89,6 @@ export default function FormKontak() {
               id="email"
               name="email"
               placeholder="Contoh: rizalabdurrahman@gmail.com"
-              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={kelasInput}
@@ -84,16 +99,19 @@ export default function FormKontak() {
           </div>
 
           <div>
-            <label htmlFor="nomor" className={kelasLabel}>
+            <label htmlFor="hp" className={kelasLabel}>
               Nomor HP
             </label>
             <input
               type="tel"
-              id="nomor"
-              name="nomor"
+              id="hp"
+              name="hp"
               placeholder="08123456789"
+              value={hp}
+              onChange={(e) => setHp(e.target.value)}
               className={kelasInput}
             />
+            {error.hp && <p className="mt-1 text-sm text-aksen">{error.hp}</p>}
           </div>
 
           <div>
@@ -103,15 +121,18 @@ export default function FormKontak() {
             <select
               id="keperluan"
               name="keperluan"
-              required
+              value={keperluan}
+              onChange={(e) => setKeperluan(e.target.value)}
               className={kelasInput}
             >
-              <option value="">-- Pilih Keperluan --</option>
-              <option value="Pertanyaan">Pertanyaan</option>
-              <option value="kerja-sama">Kerja Sama</option>
-              <option value="proyek">Proyek</option>
+              <option value="">-- Pilih keperluan --</option>
+              <option value="bertanya">Bertanya</option>
+              <option value="kerja-sama">Kerja sama proyek</option>
               <option value="lainnya">Lainnya</option>
             </select>
+            {error.keperluan && (
+              <p className="mt-1 text-sm text-aksen">{error.keperluan}</p>
+            )}
           </div>
 
           <div>
@@ -124,9 +145,13 @@ export default function FormKontak() {
               rows={5}
               maxLength={300}
               placeholder="Tulis Pesan Anda...."
-              required
+              value={pesan}
+              onChange={(e) => setPesan(e.target.value)}
               className={kelasInput}
             />
+            {error.pesan && (
+              <p className="mt-1 text-sm text-aksen">{error.pesan}</p>
+            )}
           </div>
 
           <button
@@ -140,6 +165,12 @@ export default function FormKontak() {
             Form ini belum mengirim pesan. Pengiriman pesan diaktifkan di Minggu
             15.
           </p>
+
+          {berhasil && (
+            <p className="rounded-lg bg-green-100 p-3 text-green-800 dark:bg-green-900 dark:text-green-100">
+              Terima kasih, {nama}! Pesanmu sudah lolos pemeriksaan.
+            </p>
+          )}
         </form>
 
         <aside className="w-full rounded-xl border border-garis bg-kartu p-6 shadow-sm">
