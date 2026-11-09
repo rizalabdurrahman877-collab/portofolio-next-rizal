@@ -9,13 +9,13 @@ Daftar proyek portofolio.
 | --- | --- | --- |
 | `id` | `int8` | Primary key, nomor otomatis 1, 2, 3, ... |
 | `created_at` | `timestamptz` | Waktu baris dibuat, terisi otomatis dengan `now()` |
-| `slug` | `text` | Penanda unik di alamat, misalnya `halaman-profil` (unik) |
+| `slug` | `text` | Penanda unik di alamat (unik) |
 | `judul` | `text` | Judul proyek |
 | `deskripsi` | `text` | Kalimat singkat tentang proyek |
-| `kategori` | `text` | HTML, CSS, atau JavaScript |
-| `minggu` | `text` | Minggu proyek dibuat, misalnya `Minggu 01` |
+| `kategori` | `text` | Next.js, JavaScript, atau HTML |
+| `minggu` | `text` | Minggu proyek dibuat |
 | `fitur` | `text[]` | Daftar hal yang dipelajari (array teks) |
-| `gambar_url` | `text` | Alamat gambar di folder `public` |
+| `gambar_url` | `text` | Alamat gambar di Supabase Storage |
 
 RLS aktif. Policy `Pengunjung boleh membaca proyek`: peran `anon` boleh `select` semua baris.
 

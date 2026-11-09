@@ -8,7 +8,7 @@ export default function ProyekCard({ proyek }) {
             className="block overflow-hidden rounded-xl border-gray-200 bg-white shadow-sm hover:shadow-md"
         >
             <Image
-                src={proyek.gambar}
+                src={proyek.gambar_url}
                 alt={`Tangkapan Layar ${proyek.judul}`}
                 width={640}
                 height={420}

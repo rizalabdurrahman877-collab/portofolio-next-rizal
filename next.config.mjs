@@ -9,6 +9,18 @@ const nextConfig = {
       },
     },
   },
+  
+  // TAMBAHAN: Konfigurasi agar Next.js mengizinkan gambar dari Supabase Storage
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'sfzqmzsgrkzpdvpqybpa.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
