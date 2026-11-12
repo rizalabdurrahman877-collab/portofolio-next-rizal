@@ -1,11 +1,17 @@
+
 "use client";
 
 import { useState } from "react";
-
-const kelasInput =
-  "mt-1 w-full rounded-lg border border-garis bg-isian p-2 text-teks placeholder:text-muted";
-
-const kelasLabel = "block font-semibold text-teks";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 export default function FormKontak() {
   const [nama, setNama] = useState("");
@@ -21,19 +27,17 @@ export default function FormKontak() {
 
     const errorBaru = {};
 
-    if (nama.trim() === "") {
-      errorBaru.nama = "Nama wajib diisi.";
-    }
+    if (!nama.trim()) errorBaru.nama = "Nama wajib diisi.";
 
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
-      errorBaru.email = "Email harus memuat tanda @, contoh nama@gmail.com";
+      errorBaru.email = "Masukkan alamat email yang valid.";
     }
 
-    if (hp.length < 10) {
+    if (!/^[0-9+\-\s]{10,}$/.test(hp.trim())) {
       errorBaru.hp = "Nomor HP minimal 10 angka.";
     }
 
-    if (keperluan === "") {
+    if (!keperluan) {
       errorBaru.keperluan = "Pilih salah satu keperluan.";
     }
 
@@ -46,158 +50,214 @@ export default function FormKontak() {
   }
 
   return (
-    <section className="px-2 py-6 md:px-6">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold text-judul md:text-4xl">
+    <section className="py-2">
+      <header className="mb-6">
+        <h1 className="text-2xl font-bold text-utama dark:text-sky-300 md:text-3xl">
           Hubungi Saya
         </h1>
-        <p className="mt-2 text-muted">
-          Punya pertanyaan atau ingin bekerja sama? Isi form berikut.
+
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 md:text-base">
+          Punya pertanyaan atau ingin bekerja sama? Isi formulir berikut.
         </p>
       </header>
 
-      <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_260px]">
-        <form
-          onSubmit={kirim}
-          noValidate
-          className="space-y-5 rounded-xl bg-kartu p-8 shadow-sm"
-        >
-          <div>
-            <label htmlFor="nama" className={kelasLabel}>
-              Nama Lengkap
-            </label>
-            <input
-              type="text"
-              id="nama"
-              name="nama"
-              placeholder="Contoh: Rizal Abdurrakhman"
-              value={nama}
-              onChange={(e) => setNama(e.target.value)}
-              className={kelasInput}
-            />
-            {error.nama && (
-              <p className="mt-1 text-sm text-aksen">{error.nama}</p>
-            )}
-          </div>
+      <div className="grid items-start gap-5 md:grid-cols-[minmax(0,1fr)_260px]">
+        <Card className="border-gray-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-lg text-utama dark:text-sky-300">
+              Formulir Kontak
+            </CardTitle>
 
-          <div>
-            <label htmlFor="email" className={kelasLabel}>
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Contoh: rizalabdurrahman@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={kelasInput}
-            />
-            {error.email && (
-              <p className="mt-1 text-sm text-aksen">{error.email}</p>
-            )}
-          </div>
+            <CardDescription>
+              Lengkapi informasi berikut untuk menghubungi saya.
+            </CardDescription>
+          </CardHeader>
 
-          <div>
-            <label htmlFor="hp" className={kelasLabel}>
-              Nomor HP
-            </label>
-            <input
-              type="tel"
-              id="hp"
-              name="hp"
-              placeholder="08123456789"
-              value={hp}
-              onChange={(e) => setHp(e.target.value)}
-              className={kelasInput}
-            />
-            {error.hp && <p className="mt-1 text-sm text-aksen">{error.hp}</p>}
-          </div>
+          <CardContent>
+            <form onSubmit={kirim} noValidate className="space-y-4">
+              <div>
+                <label htmlFor="nama" className="mb-2 block text-sm font-semibold rounded-xl">
+                  Nama Lengkap
+                </label>
 
-          <div>
-            <label htmlFor="keperluan" className={kelasLabel}>
-              Keperluan
-            </label>
-            <select
-              id="keperluan"
-              name="keperluan"
-              value={keperluan}
-              onChange={(e) => setKeperluan(e.target.value)}
-              className={kelasInput}
-            >
-              <option value="">-- Pilih keperluan --</option>
-              <option value="bertanya">Bertanya</option>
-              <option value="kerja-sama">Kerja sama proyek</option>
-              <option value="lainnya">Lainnya</option>
-            </select>
-            {error.keperluan && (
-              <p className="mt-1 text-sm text-aksen">{error.keperluan}</p>
-            )}
-          </div>
+                <Input
+                  id="nama"
+                  name="nama"
+                  placeholder="Contoh: Rizal Abdurrakhman"
+                  value={nama}
+                  onChange={(e) => {
+                    setNama(e.target.value);
+                    setBerhasil(false);
+                  }}
+                  aria-invalid={!!error.nama}
+                  className="border border-gray-300 bg-white shadow-sm focus-visible:border-utama focus-visible:ring-2 focus-visible:ring-utama/20"
+                />
 
-          <div>
-            <label htmlFor="pesan" className={kelasLabel}>
-              Pesan
-            </label>
-            <textarea
-              id="pesan"
-              name="pesan"
-              rows={5}
-              maxLength={300}
-              placeholder="Tulis Pesan Anda...."
-              value={pesan}
-              onChange={(e) => setPesan(e.target.value)}
-              className={kelasInput}
-            />
-            {error.pesan && (
-              <p className="mt-1 text-sm text-aksen">{error.pesan}</p>
-            )}
-          </div>
+                {error.nama && (
+                  <p className="mt-1 text-sm text-aksen">{error.nama}</p>
+                )}
+              </div>
 
-          <button
-            type="submit"
-            className="rounded-lg bg-aksen px-5 py-2 font-semibold text-white hover:opacity-90"
-          >
-            Kirim Pesan
-          </button>
+              <div>
+                <label htmlFor="email" className="mb-2 block text-sm font-semibold">
+                  Email
+                </label>
 
-          <p className="text-sm text-muted">
-            Form ini belum mengirim pesan. Pengiriman pesan diaktifkan di Minggu
-            15.
-          </p>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="nama@gmail.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setBerhasil(false);
+                  }}
+                  aria-invalid={!!error.email}
+                  className="border border-gray-300 bg-white shadow-sm focus-visible:border-utama focus-visible:ring-2 focus-visible:ring-utama/20"
+                />
 
-          {berhasil && (
-            <p className="rounded-lg bg-green-100 p-3 text-green-800 dark:bg-green-900 dark:text-green-100">
-              Terima kasih, {nama}! Pesanmu sudah lolos pemeriksaan.
-            </p>
-          )}
-        </form>
+                {error.email && (
+                  <p className="mt-1 text-sm text-aksen">{error.email}</p>
+                )}
+              </div>
 
-        <aside className="w-full rounded-xl border border-garis bg-kartu p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-bold text-judul">Temukan Saya di</h2>
+              <div>
+                <label htmlFor="hp" className="mb-2 block text-sm font-semibold">
+                  Nomor HP
+                </label>
 
-          <p className="mb-2">
+                <Input
+                  id="hp"
+                  name="hp"
+                  type="tel"
+                  placeholder="08123456789"
+                  value={hp}
+                  onChange={(e) => {
+                    setHp(e.target.value);
+                    setBerhasil(false);
+                  }}
+                  aria-invalid={!!error.hp}
+                  className="border border-gray-300 bg-white shadow-sm focus-visible:border-utama focus-visible:ring-2 focus-visible:ring-utama/20"
+                />
+
+                {error.hp && (
+                  <p className="mt-1 text-sm text-aksen">{error.hp}</p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="keperluan"
+                  className="mb-2 block text-sm font-semibold"
+                >
+                  Keperluan
+                </label>
+
+                <select
+                  id="keperluan"
+                  name="keperluan"
+                  value={keperluan}
+                  onChange={(e) => {
+                    setKeperluan(e.target.value);
+                    setBerhasil(false);
+                  }}
+                  aria-invalid={!!error.keperluan}
+                  className="h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-800 outline-none transition focus:border-utama focus:ring-2 focus:ring-utama/20 dark:border-slate-600 dark:bg-slate-800 dark:text-gray-100"
+                >
+                  <option value="">-- Pilih keperluan --</option>
+                  <option value="bertanya">Bertanya</option>
+                  <option value="kerja-sama">Kerja sama proyek</option>
+                  <option value="lainnya">Lainnya</option>
+                </select>
+
+                {error.keperluan && (
+                  <p className="mt-1 text-sm text-aksen">
+                    {error.keperluan}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="pesan" className="mb-2 block text-sm font-semibold">
+                  Pesan
+                </label>
+
+                <Textarea
+                  id="pesan"
+                  name="pesan"
+                  rows={5}
+                  maxLength={300}
+                  placeholder="Tulis pesan Anda..."
+                  value={pesan}
+                  onChange={(e) => {
+                    setPesan(e.target.value);
+                    setBerhasil(false);
+                  }}
+                  aria-invalid={!!error.pesan}
+                  className="border border-gray-300 bg-white shadow-sm focus-visible:border-utama focus-visible:ring-2 focus-visible:ring-utama/20"
+                />
+
+                {error.pesan && (
+                  <p className="mt-1 text-sm text-aksen">{error.pesan}</p>
+                )}
+              </div>
+
+              <Button
+                type="submit"
+                className="bg-aksen text-white hover:bg-aksen/90"
+              >
+                Kirim Pesan
+              </Button>
+
+              <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                Form ini belum mengirim pesan. Pengiriman pesan diaktifkan
+                di Minggu 15.
+              </p>
+
+              {berhasil && (
+                <p
+                  role="status"
+                  className="rounded-lg bg-green-100 p-3 text-sm text-green-800 dark:bg-green-900 dark:text-green-100"
+                >
+                  Terima kasih, {nama}! Pesanmu sudah lolos pemeriksaan.
+                </p>
+              )}
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card className="h-fit border-gray-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-lg text-utama dark:text-sky-300">
+              Temukan Saya
+            </CardTitle>
+
+            <CardDescription>
+              Media sosial dan profil saya.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-3">
             <a
               href="https://github.com/rizalabdurrahman877-collab/portofolio-next-rizal.git"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold text-aksen hover:underline"
+              className="block rounded-lg border border-gray-200 p-3 text-sm font-semibold text-utama transition hover:bg-gray-50 hover:text-aksen dark:border-slate-700 dark:text-sky-300 dark:hover:bg-slate-800"
             >
               GitHub
             </a>
-          </p>
 
-          <p className="mb-2">
             <a
-              href="https://www.instagram.com/zallssss?obrf=MTN3emkwdHI3NDd5cA=="
+              href="https://www.instagram.com/zallssss"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold text-aksen hover:underline"
+              className="block rounded-lg border border-gray-200 p-3 text-sm font-semibold text-utama transition hover:bg-gray-50 hover:text-aksen dark:border-slate-700 dark:text-sky-300 dark:hover:bg-slate-800"
             >
               Instagram
             </a>
-          </p>
-        </aside>
+          </CardContent>
+        </Card>
       </div>
     </section>
   );

@@ -6,21 +6,26 @@ export default function TombolTema() {
   const [gelap, setGelap] = useState(false);
 
   useEffect(() => {
-    setGelap(document.documentElement.classList.contains("dark"));
+    const tema = localStorage.getItem("tema");
+    const modeGelap = tema === "gelap";
+
+    setGelap(modeGelap);
+    document.documentElement.classList.toggle("dark", modeGelap);
   }, []);
 
-  function gantiTema() {
-    const siapGelap = !document.documentElement.classList.contains("dark");
-    document.documentElement.classList.toggle("dark", siapGelap);
-    localStorage.setItem("tema", siapGelap ? "gelap" : "terang");
-    setGelap(siapGelap);
+  function ubahTema() {
+    const modeBaru = !gelap;
+
+    setGelap(modeBaru);
+    document.documentElement.classList.toggle("dark", modeBaru);
+    localStorage.setItem("tema", modeBaru ? "gelap" : "terang");
   }
 
   return (
     <button
       type="button"
-      onClick={gantiTema}
-      className="rounded-lg border border-white px-3 py-1 text-sm font-semibold text-white hover:bg-aksen"
+      onClick={ubahTema}
+      className="rounded-lg border border-white px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#1D3557]"
     >
       {gelap ? "Mode Terang" : "Mode Gelap"}
     </button>

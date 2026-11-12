@@ -1,3 +1,4 @@
+
 import Hero from "@/components/Hero";
 import Kartu from "@/components/Kartu";
 import SkillCard from "@/components/SkillCard";
@@ -17,7 +18,7 @@ const skills = [
   { nama: "HTML", level: "Menengah" },
   { nama: "CSS", level: "Menengah" },
   { nama: "Git dan Github", level: "Dasar" },
-  { nama: "Desain Poster Dengan Canva", level: "Mahir" },
+  { nama: "Desain poster dengan Canva", level: "Mahir" },
   { nama: "JavaScript", level: "Dasar" },
 ];
 
@@ -33,16 +34,18 @@ export default function Home() {
   const proyekTerbaru = proyek.slice(-3);
 
   return (
-    <main className="min-h-screen bg-latar px-4 py-8 md:py-10">
-      <section className="mx-auto max-w-3xl">
+    <main className="min-h-screen bg-white px-4 py-7 text-gray-800 transition-colors dark:bg-slate-950 dark:text-gray-100">
+      <div className="mx-auto max-w-5xl">
+        {/* Hero */}
         <Hero
           nama="Rizal Abdurrakhman Wakhid"
-          tagline="Siswa Kelas X SMKN, calon Junior Web Developer  di Kelas Industri UBIG."
+          tagline="Siswa Kelas X SMKN, calon Junior Web Developer di Kelas Industri UBIG."
         />
 
-        <section className="mt-8 space-y-6">
+        {/* Keahlian */}
+        <section className="mt-8">
           <Kartu judul="Keahlian">
-            <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <section className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {skills.map((skill) => (
                 <SkillCard
                   key={skill.nama}
@@ -52,29 +55,30 @@ export default function Home() {
               ))}
             </section>
           </Kartu>
-
-          <section className="mt-10">
-            <div className="rounded-2xl bg-white p-6 shadow-md md:p-8">
-              <h2 className="mb-4 text-2xl font-bold text-utama">
-                Proyek Terbaru
-              </h2>
-
-              <div className="grid gap-6 md:grid-cols-3">
-                {proyekTerbaru.map((item) => (
-                  <ProyekCard key={item.slug} proyek={item} />
-                ))}
-              </div>
-
-              <Link
-                href="/proyek"
-                className="mt-6 inline-block rounded-lg bg-utama px-5 py-2 font-semibold text-white"
-              >
-                Lihat Semua Proyek
-              </Link>
-            </div>
-          </section>
         </section>
-      </section>
+
+        {/* Proyek Terbaru */}
+        <section className="mt-8">
+          <div className="rounded-xl bg-white dark:bg-slate-900">
+            <h2 className="mb-4 text-xl font-bold text-utama dark:text-sky-300">
+              Proyek Terbaru
+            </h2>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {proyekTerbaru.map((item) => (
+                <ProyekCard key={item.slug} proyek={item} />
+              ))}
+            </div>
+
+            <Link
+              href="/proyek"
+              className="mt-5 inline-block rounded-lg bg-utama px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-800"
+            >
+              Lihat Semua Proyek
+            </Link>
+          </div>
+        </section>
+      </div>
     </main>
   );
 }
