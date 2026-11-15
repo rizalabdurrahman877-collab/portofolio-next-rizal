@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,25 +15,27 @@ export default function Hero({ nama, tagline }) {
       />
 
       <div className="min-w-0">
-        <h1 className="text-2xl font-bold leading-tight text-utama dark:text-sky-300 sm:text-3xl">
+        <h1 className="text-2xl font-bold leading-tight text-utama transition-colors duration-300 dark:text-sky-300 sm:text-3xl">
           Halo, Saya {nama}!
         </h1>
 
-        <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:text-base">
+        <p className="mt-2 text-sm leading-relaxed text-gray-600 transition-colors duration-300 dark:text-gray-300 sm:text-base">
           {tagline}
         </p>
 
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-5 flex flex-wrap justify-center gap-3 sm:justify-start">
+          {/* Tombol Lihat Proyek */}
           <Link
             href="/proyek"
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-zinc-100 dark:bg-black dark:text-white dark:hover:bg-zinc-900"
+            className="rounded-lg bg-[#1e3a5f] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#294b75] dark:bg-sky-200 dark:text-slate-900 dark:hover:bg-sky-100"
           >
             Lihat Proyek
           </Link>
 
+          {/* Tombol Hubungi Saya */}
           <Link
             href="/kontak"
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-zinc-100 dark:bg-black dark:text-white dark:hover:bg-zinc-900"
+            className="rounded-lg bg-transparent px-4 py-2 text-sm font-semibold text-[#1e3a5f] transition-all duration-300 hover:bg-zinc-100 dark:border dark:border-zinc-700 dark:bg-[#171717] dark:text-white dark:hover:bg-[#222222]"
           >
             Hubungi Saya
           </Link>
