@@ -1,24 +1,24 @@
-"use server";
+﻿"use server";
 
-import { supabaseAdmin } from "@/lib/supabase-admin";
-import { sudahMasuk } from "@/lib/pin";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { supabaseAdmin } from "@/lib/supabase-admin";
+import { sudahMasuk } from "@/lib/pin";
 
+// Memeriksa login admin
 async function periksaAdmin() {
-  if (!(await sudahMasuk())) {
+  const login = await sudahMasuk();
+
+  if (!login) {
     redirect("/kelola");
   }
 }
 
-// ==============================
-// CRUD PROYEK
-// ==============================
-
+// Mengubah fitur dari teks menjadi array
 function ambilDataProyek(formData) {
   return {
-    slug: String(formData.get("slug") || "").trim(),
     judul: String(formData.get("judul") || "").trim(),
+    slug: String(formData.get("slug") || "").trim(),
     deskripsi: String(formData.get("deskripsi") || "").trim(),
     kategori: String(formData.get("kategori") || "").trim(),
     minggu: String(formData.get("minggu") || "").trim(),
@@ -26,23 +26,27 @@ function ambilDataProyek(formData) {
       .split("\n")
       .map((item) => item.trim())
       .filter(Boolean),
-    gambar_url: String(formData.get("gambar_url") || "").trim() || null,
+    gambar_url: String(formData.get("gambar_url") || "").trim(),
   };
 }
 
+// Menambahkan proyek
 export async function tambahProyek(formData) {
   await periksaAdmin();
 
   const data = ambilDataProyek(formData);
 
-  if (!data.slug || !data.judul) {
-    throw new Error("Slug dan judul wajib diisi.");
+  if (!data.judul || !data.slug) {
+    throw new Error("Judul dan slug wajib diisi.");
   }
 
-  const { error } = await supabaseAdmin.from("projects").insert(data);
+  const { error } = await supabaseAdmin
+    .from("projects")
+    .insert(data);
 
   if (error) {
-    throw new Error("Gagal menambahkan proyek: " + error.message);
+    console.error("Gagal menambahkan proyek:", error.message);
+    throw new Error("Proyek gagal ditambahkan.");
   }
 
   revalidatePath("/kelola");
@@ -50,14 +54,15 @@ export async function tambahProyek(formData) {
   revalidatePath("/");
 }
 
+// Mengubah proyek
 export async function ubahProyek(formData) {
   await periksaAdmin();
 
-  const id = String(formData.get("id") || "");
+  const id = String(formData.get("id") || "").trim();
   const data = ambilDataProyek(formData);
 
-  if (!id || !data.slug || !data.judul) {
-    throw new Error("ID, slug, dan judul wajib diisi.");
+  if (!id || !data.judul || !data.slug) {
+    throw new Error("Data proyek belum lengkap.");
   }
 
   const { error } = await supabaseAdmin
@@ -66,7 +71,8 @@ export async function ubahProyek(formData) {
     .eq("id", id);
 
   if (error) {
-    throw new Error("Gagal mengubah proyek: " + error.message);
+    console.error("Gagal mengubah proyek:", error.message);
+    throw new Error("Proyek gagal diperbarui.");
   }
 
   revalidatePath("/kelola");
@@ -74,19 +80,24 @@ export async function ubahProyek(formData) {
   revalidatePath("/");
 }
 
+// Menghapus proyek
 export async function hapusProyek(formData) {
   await periksaAdmin();
 
-  const id = String(formData.get("id") || "");
+  const id = String(formData.get("id") || "").trim();
 
   if (!id) {
     throw new Error("ID proyek tidak ditemukan.");
   }
 
-  const { error } = await supabaseAdmin.from("projects").delete().eq("id", id);
+  const { error } = await supabaseAdmin
+    .from("projects")
+    .delete()
+    .eq("id", id);
 
   if (error) {
-    throw new Error("Gagal menghapus proyek: " + error.message);
+    console.error("Gagal menghapus proyek:", error.message);
+    throw new Error("Proyek gagal dihapus.");
   }
 
   revalidatePath("/kelola");
@@ -94,14 +105,11 @@ export async function hapusProyek(formData) {
   revalidatePath("/");
 }
 
-// ==============================
-// KELOLA BUKU TAMU
-// ==============================
-
+// Menyematkan atau melepas sematan pesan
 export async function ubahSematanPesan(formData) {
   await periksaAdmin();
 
-  const id = String(formData.get("id") || "");
+  const id = String(formData.get("id") || "").trim();
   const disematkan = formData.get("disematkan") === "true";
 
   if (!id) {
@@ -114,26 +122,32 @@ export async function ubahSematanPesan(formData) {
     .eq("id", id);
 
   if (error) {
-    throw new Error("Gagal mengubah sematan: " + error.message);
+    console.error("Gagal mengubah sematan:", error.message);
+    throw new Error("Status sematan gagal diperbarui.");
   }
 
   revalidatePath("/kelola");
   revalidatePath("/buku-tamu");
 }
 
+// Menghapus pesan buku tamu
 export async function hapusPesan(formData) {
   await periksaAdmin();
 
-  const id = String(formData.get("id") || "");
+  const id = String(formData.get("id") || "").trim();
 
   if (!id) {
     throw new Error("ID pesan tidak ditemukan.");
   }
 
-  const { error } = await supabaseAdmin.from("buku_tamu").delete().eq("id", id);
+  const { error } = await supabaseAdmin
+    .from("buku_tamu")
+    .delete()
+    .eq("id", id);
 
   if (error) {
-    throw new Error("Gagal menghapus pesan: " + error.message);
+    console.error("Gagal menghapus pesan:", error.message);
+    throw new Error("Pesan gagal dihapus.");
   }
 
   revalidatePath("/kelola");

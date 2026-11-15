@@ -1,8 +1,7 @@
-
 "use client";
 
-import { useActionState } from "react";
-import { kirimPesan } from "@/app/action";
+import { useActionState, useEffect, useState } from "react";
+import { kirimPesan } from "@/app/actions";
 import TombolKirim from "@/components/TombolKirim";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,57 +9,62 @@ import { Textarea } from "@/components/ui/textarea";
 const initialState = {};
 
 export default function FormBukuTamu() {
-  const [state, formAction] = useActionState(
-    kirimPesan,
-    initialState
-  );
+  const [state, formAction] = useActionState(kirimPesan, initialState);
+
+  const [nama, setNama] = useState("");
+  const [pesan, setPesan] = useState("");
+
+  useEffect(() => {
+    if (state.error) {
+      setNama(state.nama ?? "");
+      setPesan(state.pesan ?? "");
+    }
+
+    if (state.berhasil) {
+      setNama("");
+      setPesan("");
+    }
+  }, [state]);
 
   return (
     <form action={formAction} className="space-y-4">
-      <div className="space-y-2">
-        <label htmlFor="nama" className="text-sm font-medium">
+      <div>
+        <label htmlFor="nama" className="mb-1 block text-sm font-medium">
           Nama
         </label>
+
         <Input
           id="nama"
           name="nama"
-          placeholder="Masukkan nama kamu"
-          defaultValue={state.nama || ""}
-          maxLength={80}
-          required
-          className="border border-gray-400 dark:border-slate-600"
+          placeholder="Masukkan nama"
+          value={nama}
+          onChange={(e) => setNama(e.target.value)}
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="pesan" className="text-sm font-medium">
+      <div>
+        <label htmlFor="pesan" className="mb-1 block text-sm font-medium">
           Pesan
         </label>
+
         <Textarea
           id="pesan"
           name="pesan"
-          rows={4}
-          placeholder="Tuliskan pesan..."
-          defaultValue={state.pesan || ""}
-          maxLength={1000}
-          required
-          className="min-h-28 border border-gray-400 dark:border-slate-600"
+          placeholder="Tulis pesanmu"
+          value={pesan}
+          onChange={(e) => setPesan(e.target.value)}
         />
       </div>
 
+      <TombolKirim />
+
       {state.error && (
-        <p role="alert" className="text-sm text-red-600">
-          {state.error}
-        </p>
+        <p className="text-sm font-medium text-red-600">{state.error}</p>
       )}
 
       {state.berhasil && (
-        <p role="status" className="text-sm text-green-600">
-          {state.berhasil}
-        </p>
+        <p className="text-sm font-medium text-green-600">{state.berhasil}</p>
       )}
-
-      <TombolKirim teks="Kirim Pesan" />
     </form>
   );
 }

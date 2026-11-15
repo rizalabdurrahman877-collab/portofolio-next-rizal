@@ -1,7 +1,7 @@
 
 "use client";
 
-import { hapusPesan } from "@/app/kelola/action";
+import { hapusPesan } from "@/app/kelola/actions";
 
 export default function TombolHapusPesan({ id }) {
   function konfirmasi(event) {

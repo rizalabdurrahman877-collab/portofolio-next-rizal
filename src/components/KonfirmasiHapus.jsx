@@ -1,5 +1,5 @@
 
-import { hapusProyek } from "@/app/kelola/action";
+import { hapusProyek } from "@/app/kelola/actions";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
