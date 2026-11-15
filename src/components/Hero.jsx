@@ -25,14 +25,14 @@ export default function Hero({ nama, tagline }) {
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
             href="/proyek"
-            className="rounded-lg bg-sky-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-sky-200"
+            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-zinc-100 dark:bg-black dark:text-white dark:hover:bg-zinc-900"
           >
             Lihat Proyek
           </Link>
 
           <Link
             href="/kontak"
-            className="rounded-lg bg-zinc-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-700"
+            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-zinc-100 dark:bg-black dark:text-white dark:hover:bg-zinc-900"
           >
             Hubungi Saya
           </Link>
