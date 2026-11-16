@@ -47,7 +47,7 @@ export default function ProyekCard({ proyek }) {
               {proyek.judul}
             </h3>
 
-            <p className="mt-2 line-clamp-2 min-h-10 text-sm leading-relaxed text-muted">
+            <p className="mt-2 line-clamp-2 min-h-10 text-sm leading-relaxed text-black dark:text-gray-100">
               {proyek.deskripsi}
             </p>
           </div>
