@@ -31,11 +31,26 @@ export default async function KelolaPage({ searchParams }) {
   // HALAMAN LOGIN ADMIN
   if (!masuk) {
     return (
-      <main className="min-h-screen w-full bg-background px-4 py-16 text-foreground">
+      <main className="min-h-screen w-full bg-background px-4 py-16 text-foreground transition-colors duration-300">
         <div className="mx-auto max-w-md">
-          <Card className="border-border bg-card">
+          {/* JUDUL DAN DESKRIPSI */}
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl font-bold text-primary sm:text-4xl">
+              Kelola Data
+            </h1>
+
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Halaman ini hanya untuk pemilik portofolio.
+            </p>
+          </div>
+
+          {/* FORM LOGIN */}
+          <Card className="border-border bg-card shadow-sm">
             <CardHeader>
-              <CardTitle>Login Admin</CardTitle>
+              <CardTitle className="text-card-foreground">
+                Login Admin
+              </CardTitle>
+
               <CardDescription>
                 Masukkan PIN untuk mengelola proyek dan buku tamu.
               </CardDescription>
@@ -54,7 +69,7 @@ export default async function KelolaPage({ searchParams }) {
                   name="pin"
                   placeholder="Masukkan PIN Admin"
                   required
-                  className="w-full rounded-lg border border-input bg-background p-3 text-foreground outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full rounded-lg border border-input bg-background p-3 text-foreground outline-none transition focus:ring-2 focus:ring-ring"
                 />
 
                 <button
@@ -87,12 +102,17 @@ export default async function KelolaPage({ searchParams }) {
   return (
     <main className="min-h-screen w-full bg-background px-4 py-8 text-foreground transition-colors duration-300 sm:py-10">
       <div className="mx-auto w-full max-w-5xl">
-
         {/* HEADER KELOLA DATA */}
         <div className="mb-10 flex items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
-            Kelola Data
-          </h1>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
+              Kelola Data
+            </h1>
+
+            <p className="mt-2 text-sm text-muted-foreground">
+              Kelola proyek dan pesan buku tamu.
+            </p>
+          </div>
 
           <form action={logoutAdmin}>
             <button
