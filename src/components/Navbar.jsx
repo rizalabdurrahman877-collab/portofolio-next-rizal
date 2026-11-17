@@ -17,13 +17,13 @@ export default function Navbar() {
 
   return (
     <header className="w-full bg-[#1D3557] text-white shadow-sm">
-      <nav className="mx-auto flex min-h-16 max-w-5xl flex-wrap items-center justify-between gap-4 px-4 py-3">
+      <nav className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3">
         {/* Logo */}
         <Link href="/" className="text-lg font-bold tracking-tight text-white">
-          Rizal Abdurrakhman Wakhid
+          Rizal Abdurrahman Wakhid
         </Link>
 
-        {/* Menu navigasi */}
+        {/* Menu Navigasi */}
         <div className="flex flex-wrap items-center justify-center gap-5">
           {menu.map((item) => {
             const aktif =
@@ -41,13 +41,13 @@ export default function Navbar() {
                     : "border-transparent text-white/90 hover:border-white hover:text-white"
                 }`}
               >
-                {item.nama}
+                {item.label}
               </Link>
             );
           })}
         </div>
 
-        {/* Tombol tema */}
+        {/* Tombol Tema */}
         <TombolTema />
       </nav>
     </header>
