@@ -1,18 +1,11 @@
-
-import Hero from "@/components/Hero";
+﻿import Hero from "@/components/Hero";
 import Kartu from "@/components/Kartu";
 import SkillCard from "@/components/SkillCard";
-import { proyek } from "@/data/proyek";
 import ProyekCard from "@/components/ProyekCard";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
-const hobi = ["Mancing Ikan", "Coding", "Bermain Bulu Tangkis", "Jogging"];
-
-const rencana = [
-  "Menjadi Junior Web Developer",
-  "Meningkatkan kemampuan Next.js",
-  "Membuat Website yang bermanfaat",
-];
+export const dynamic = "force-dynamic";
 
 const skills = [
   { nama: "HTML", level: "Menengah" },
@@ -22,27 +15,22 @@ const skills = [
   { nama: "JavaScript", level: "Dasar" },
 ];
 
-const jadwal = [
-  { hari: "Senin", waktu: "19.00 - 20.00", kegiatan: "Belajar HTML dan CSS" },
-  { hari: "Selasa", waktu: "19.00 - 20.00", kegiatan: "Belajar JavaScript" },
-  { hari: "Rabu", waktu: "19.00 - 21.00", kegiatan: "Latihan membuat website" },
-  { hari: "Kamis", waktu: "19.00 - 20.00", kegiatan: "Belajar Next.js" },
-  { hari: "Jumat", waktu: "19.00 - 20.30", kegiatan: "Evaluasi Proyek" },
-];
-
-export default function Home() {
-  const proyekTerbaru = proyek.slice(-3);
+export default async function Home() {
+  const { data: proyekTerbaru, error } = await supabase
+    .from("projects")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(3);
 
   return (
-    <main className="min-h-screen bg-white px-4 py-7 text-black-800 transition-colors dark:bg-black dark:text-gray-100">
+    <main className="min-h-screen bg-white px-4 py-7 text-black transition-colors dark:bg-black dark:text-gray-100">
       <div className="mx-auto max-w-5xl">
-        {/* Hero */}
+
         <Hero
           nama="Rizal Abdurrakhman Wakhid"
           tagline="Siswa Kelas X SMKN, calon Junior Web Developer di Kelas Industri UBIG."
         />
 
-        {/* Keahlian */}
         <section className="mt-8">
           <Kartu judul="Keahlian">
             <section className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -57,24 +45,33 @@ export default function Home() {
           </Kartu>
         </section>
 
-        {/* Proyek Terbaru */}
         <section className="mt-8">
-           <h2 className="mb-4 text-xl font-bold text-utama dark:text-sky-300">
-              Proyek Terbaru
-            </h2>
-          <div className="rounded-xl bg-white dark:bg-slate-900">
+          <h2 className="mb-4 text-xl font-bold text-utama dark:text-sky-300">
+            Proyek Terbaru
+          </h2>
+
+          {error ? (
+            <p className="text-sm text-red-500">
+              Gagal memuat proyek terbaru.
+            </p>
+          ) : proyekTerbaru && proyekTerbaru.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
               {proyekTerbaru.map((item) => (
-                <ProyekCard key={item.slug} proyek={item} />
+                <ProyekCard key={item.id} proyek={item} />
               ))}
             </div>
-          </div>
-           <Link
-              href="/proyek"
-              className="mt-5 inline-block rounded-lg bg-utama px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-800"
-            >
-              Lihat Semua Proyek
-            </Link>
+          ) : (
+            <p className="text-sm text-gray-500">
+              Belum ada proyek.
+            </p>
+          )}
+
+          <Link
+            href="/proyek"
+            className="mt-5 inline-block rounded-lg bg-utama px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-800"
+          >
+            Lihat Semua Proyek
+          </Link>
         </section>
       </div>
     </main>

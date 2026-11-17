@@ -1,11 +1,11 @@
-﻿"use server";
+"use server";
 
 import { revalidatePath } from "next/cache";
 import { supabase } from "@/lib/supabase";
 
 export async function kirimPesan(stateSebelum, formData) {
-  const nama = String(formData.get("nama") || "").trim();
-  const pesan = String(formData.get("pesan") || "").trim();
+  const nama = (formData.get("nama") || "").trim();
+  const pesan = (formData.get("pesan") || "").trim();
 
   if (!nama || !pesan) {
     return {
@@ -15,13 +15,11 @@ export async function kirimPesan(stateSebelum, formData) {
     };
   }
 
-  const { error } = await supabase
-    .from("buku_tamu")
-    .insert({ nama, pesan });
+  const { error } = await supabase.from("buku_tamu").insert({ nama, pesan });
 
   if (error) {
     return {
-      error: "Pesan gagal disimpan. Silakan coba lagi.",
+      error: `Pesan gagal disimpan: ${error.message}`,
       nama,
       pesan,
     };
@@ -31,7 +29,5 @@ export async function kirimPesan(stateSebelum, formData) {
 
   return {
     berhasil: `Terima kasih, ${nama}! Pesanmu sudah tersimpan.`,
-    nama: "",
-    pesan: "",
   };
 }

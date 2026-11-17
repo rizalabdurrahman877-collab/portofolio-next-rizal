@@ -5,90 +5,195 @@ import { redirect } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { sudahMasuk } from "@/lib/pin";
 
-// Memeriksa login admin
-async function periksaAdmin() {
-  const login = await sudahMasuk();
+const daftarKategori = ["HTML", "CSS", "JavaScript", "Next.js"];
 
-  if (!login) {
-    redirect("/kelola");
-  }
-}
-
-// Mengubah fitur dari teks menjadi array
-function ambilDataProyek(formData) {
+function bacaProyek(formData) {
   return {
     judul: String(formData.get("judul") || "").trim(),
     slug: String(formData.get("slug") || "").trim(),
-    deskripsi: String(formData.get("deskripsi") || "").trim(),
     kategori: String(formData.get("kategori") || "").trim(),
     minggu: String(formData.get("minggu") || "").trim(),
+    deskripsi: String(formData.get("deskripsi") || "").trim(),
     fitur: String(formData.get("fitur") || "")
       .split("\n")
-      .map((item) => item.trim())
-      .filter(Boolean),
+      .map((f) => f.trim())
+      .filter((f) => f !== ""),
     gambar_url: String(formData.get("gambar_url") || "").trim(),
   };
 }
 
-// Menambahkan proyek
-export async function tambahProyek(formData) {
-  await periksaAdmin();
-
-  const data = ambilDataProyek(formData);
-
-  if (!data.judul || !data.slug) {
-    throw new Error("Judul dan slug wajib diisi.");
+function cekProyek(proyek) {
+  if (
+    proyek.judul === "" ||
+    proyek.slug === "" ||
+    proyek.deskripsi === ""
+  ) {
+    return "Judul, slug, dan deskripsi wajib diisi.";
   }
 
-  const { error } = await supabaseAdmin
-    .from("projects")
-    .insert(data);
-
-  if (error) {
-    console.error("Gagal menambahkan proyek:", error.message);
-    throw new Error("Proyek gagal ditambahkan.");
+  if (proyek.slug.includes(" ")) {
+    return "Slug tidak boleh memakai spasi. Gunakan tanda hubung, contoh: buku-tamu.";
   }
 
-  revalidatePath("/kelola");
-  revalidatePath("/proyek");
-  revalidatePath("/");
+  if (!daftarKategori.includes(proyek.kategori)) {
+    return "Kategori harus HTML, CSS, JavaScript, atau Next.js.";
+  }
+
+  if (!proyek.gambar_url.startsWith("/proyek/")) {
+    return "Alamat gambar harus diawali /proyek/, contoh: /proyek/proyek-buku-tamu.png.";
+  }
+
+  return "";
 }
 
-// Mengubah proyek
-export async function ubahProyek(formData) {
-  await periksaAdmin();
-
-  const id = String(formData.get("id") || "").trim();
-  const data = ambilDataProyek(formData);
-
-  if (!id || !data.judul || !data.slug) {
-    throw new Error("Data proyek belum lengkap.");
-  }
-
-  const { error } = await supabaseAdmin
-    .from("projects")
-    .update(data)
-    .eq("id", id);
-
-  if (error) {
-    console.error("Gagal mengubah proyek:", error.message);
-    throw new Error("Proyek gagal diperbarui.");
-  }
-
-  revalidatePath("/kelola");
-  revalidatePath("/proyek");
+function perbaruiHalaman(slug) {
   revalidatePath("/");
+  revalidatePath("/proyek");
+  revalidatePath(`/proyek/${slug}`);
+  revalidatePath("/kelola");
 }
 
-// Menghapus proyek
-export async function hapusProyek(formData) {
-  await periksaAdmin();
+// ==========================================
+// TAMBAH PROYEK
+// ==========================================
 
-  const id = String(formData.get("id") || "").trim();
+export async function tambahProyek(stateSebelum, formData) {
+  const proyek = bacaProyek(formData);
+
+  if (!(await sudahMasuk())) {
+    return {
+      error: "Masukkan PIN dulu di halaman Kelola.",
+      proyek,
+    };
+  }
+
+  const errorValidasi = cekProyek(proyek);
+
+  if (errorValidasi !== "") {
+    return {
+      error: errorValidasi,
+      proyek,
+    };
+  }
+
+  const hasil = await supabaseAdmin
+    .from("projects")
+    .insert(proyek);
+
+  if (hasil.error) {
+    if (hasil.error.code === "23505") {
+      return {
+        error: "Slug sudah dipakai proyek lain.",
+        proyek,
+      };
+    }
+
+    return {
+      error: `Proyek gagal disimpan: ${hasil.error.message}`,
+      proyek,
+    };
+  }
+
+  perbaruiHalaman(proyek.slug);
+  redirect("/kelola");
+}
+
+// ==========================================
+// UBAH PROYEK
+// ==========================================
+
+export async function ubahProyek(stateSebelum, formData) {
+  const id = String(formData.get("id") || "");
+  const proyek = {
+    ...bacaProyek(formData),
+    id,
+  };
+
+  if (!(await sudahMasuk())) {
+    return {
+      error: "Masukkan PIN dulu di halaman Kelola.",
+      proyek,
+    };
+  }
 
   if (!id) {
-    throw new Error("ID proyek tidak ditemukan.");
+    return {
+      error: "ID proyek tidak valid.",
+      proyek,
+    };
   }
+
+  const errorValidasi = cekProyek(proyek);
+
+  if (errorValidasi !== "") {
+    return {
+      error: errorValidasi,
+      proyek,
+    };
+  }
+
+  const { data: proyekLama } = await supabaseAdmin
+    .from("projects")
+    .select("slug")
+    .eq("id", id)
+    .single();
+
+  const hasil = await supabaseAdmin
+    .from("projects")
+    .update({
+      judul: proyek.judul,
+      slug: proyek.slug,
+      kategori: proyek.kategori,
+      minggu: proyek.minggu,
+      deskripsi: proyek.deskripsi,
+      fitur: proyek.fitur,
+      gambar_url: proyek.gambar_url,
+    })
+    .eq("id", id);
+
+  if (hasil.error) {
+    if (hasil.error.code === "23505") {
+      return {
+        error: "Slug sudah dipakai proyek lain.",
+        proyek,
+      };
+    }
+
+    return {
+      error: `Proyek gagal diubah: ${hasil.error.message}`,
+      proyek,
+    };
+  }
+
+  perbaruiHalaman(proyek.slug);
+
+  if (proyekLama?.slug && proyekLama.slug !== proyek.slug) {
+    revalidatePath(`/proyek/${proyekLama.slug}`);
+  }
+
+  redirect("/kelola");
+}
+
+// ==========================================
+// HAPUS PROYEK
+// ==========================================
+
+export async function hapusProyek(formData) {
+  if (!(await sudahMasuk())) {
+    redirect("/kelola");
+  }
+
+  const id = formData.get("id");
+
+  if (!id) {
+    throw new Error("ID proyek tidak valid.");
+  }
+
+  const { data: proyek } = await supabaseAdmin
+    .from("projects")
+    .select("slug")
+    .eq("id", id)
+    .single();
 
   const { error } = await supabaseAdmin
     .from("projects")
@@ -96,24 +201,32 @@ export async function hapusProyek(formData) {
     .eq("id", id);
 
   if (error) {
-    console.error("Gagal menghapus proyek:", error.message);
-    throw new Error("Proyek gagal dihapus.");
+    throw new Error(`Proyek gagal dihapus: ${error.message}`);
   }
 
-  revalidatePath("/kelola");
-  revalidatePath("/proyek");
   revalidatePath("/");
+  revalidatePath("/proyek");
+  revalidatePath("/kelola");
+
+  if (proyek?.slug) {
+    revalidatePath(`/proyek/${proyek.slug}`);
+  }
 }
 
-// Menyematkan atau melepas sematan pesan
-export async function ubahSematanPesan(formData) {
-  await periksaAdmin();
+// ==========================================
+// SEMATKAN / LEPAS SEMATAN PESAN
+// ==========================================
 
-  const id = String(formData.get("id") || "").trim();
+export async function ubahSematanPesan(formData) {
+  if (!(await sudahMasuk())) {
+    redirect("/kelola");
+  }
+
+  const id = formData.get("id");
   const disematkan = formData.get("disematkan") === "true";
 
   if (!id) {
-    throw new Error("ID pesan tidak ditemukan.");
+    throw new Error("ID pesan tidak valid.");
   }
 
   const { error } = await supabaseAdmin
@@ -122,22 +235,27 @@ export async function ubahSematanPesan(formData) {
     .eq("id", id);
 
   if (error) {
-    console.error("Gagal mengubah sematan:", error.message);
-    throw new Error("Status sematan gagal diperbarui.");
+    throw new Error(`Gagal mengubah sematan pesan: ${error.message}`);
   }
 
   revalidatePath("/kelola");
   revalidatePath("/buku-tamu");
+  revalidatePath("/");
 }
 
-// Menghapus pesan buku tamu
-export async function hapusPesan(formData) {
-  await periksaAdmin();
+// ==========================================
+// HAPUS PESAN BUKU TAMU
+// ==========================================
 
-  const id = String(formData.get("id") || "").trim();
+export async function hapusPesan(formData) {
+  if (!(await sudahMasuk())) {
+    redirect("/kelola");
+  }
+
+  const id = formData.get("id");
 
   if (!id) {
-    throw new Error("ID pesan tidak ditemukan.");
+    throw new Error("ID pesan tidak valid.");
   }
 
   const { error } = await supabaseAdmin
@@ -146,10 +264,10 @@ export async function hapusPesan(formData) {
     .eq("id", id);
 
   if (error) {
-    console.error("Gagal menghapus pesan:", error.message);
-    throw new Error("Pesan gagal dihapus.");
+    throw new Error(`Gagal menghapus pesan: ${error.message}`);
   }
 
   revalidatePath("/kelola");
   revalidatePath("/buku-tamu");
+  revalidatePath("/");
 }

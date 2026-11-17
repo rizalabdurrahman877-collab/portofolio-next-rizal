@@ -1,142 +1,111 @@
-﻿import Link from "next/link";
-import { tambahProyek, ubahProyek } from "@/app/kelola/actions";
+﻿"use client";
 
-export default function FormProyek({ proyek }) {
-  const sedangEdit = Boolean(proyek);
+import Link from "next/link";
+import { useActionState } from "react";
+
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import TombolKirim from "@/components/TombolKirim";
+
+export default function FormProyek({ aksi, proyek, teksTombol }) {
+  const [state, formAction] = useActionState(aksi, { proyek });
+
+  const data = state.proyek || proyek;
 
   return (
-    <form
-      action={sedangEdit ? ubahProyek : tambahProyek}
-      className="space-y-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900"
-    >
-      {sedangEdit && <input type="hidden" name="id" value={proyek.id} />}
+    <form action={formAction} className="space-y-4">
+      {data.id && (
+        <input type="hidden" name="id" value={data.id} />
+      )}
 
-      <div>
-        <label
-          htmlFor="judul"
-          className="mb-1 block text-sm font-semibold text-gray-800 dark:text-white"
-        >
-          Judul Proyek
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="judul">Judul Proyek</Label>
+        <Input
           id="judul"
           name="judul"
-          defaultValue={proyek?.judul || ""}
-          required
-          className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+          defaultValue={data.judul || ""}
+          placeholder="Contoh: Buku Tamu Digital"
         />
       </div>
 
-      <div>
-        <label
-          htmlFor="slug"
-          className="mb-1 block text-sm font-semibold text-gray-800 dark:text-white"
-        >
-          Slug
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="slug">Slug</Label>
+        <Input
           id="slug"
           name="slug"
-          defaultValue={proyek?.slug || ""}
-          required
-          className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+          defaultValue={data.slug || ""}
+          placeholder="Contoh: buku-tamu"
         />
       </div>
 
-      <div>
-        <label
-          htmlFor="deskripsi"
-          className="mb-1 block text-sm font-semibold text-gray-800 dark:text-white"
-        >
-          Deskripsi
-        </label>
-        <textarea
-          id="deskripsi"
-          name="deskripsi"
-          defaultValue={proyek?.deskripsi || ""}
-          rows={4}
-          className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="kategori"
-          className="mb-1 block text-sm font-semibold text-gray-800 dark:text-white"
-        >
-          Kategori
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="kategori">Kategori</Label>
+        <Input
           id="kategori"
           name="kategori"
-          defaultValue={proyek?.kategori || ""}
-          className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+          defaultValue={data.kategori || ""}
+          placeholder="HTML, CSS, JavaScript, atau Next.js"
         />
       </div>
 
-      <div>
-        <label
-          htmlFor="minggu"
-          className="mb-1 block text-sm font-semibold text-gray-800 dark:text-white"
-        >
-          Minggu
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="minggu">Minggu</Label>
+        <Input
           id="minggu"
           name="minggu"
-          defaultValue={proyek?.minggu || ""}
-          className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+          defaultValue={data.minggu || ""}
+          placeholder="Contoh: Minggu 15"
         />
       </div>
 
-      <div>
-        <label
-          htmlFor="fitur"
-          className="mb-1 block text-sm font-semibold text-gray-800 dark:text-white"
-        >
-          Fitur Proyek
-        </label>
-        <textarea
+      <div className="space-y-2">
+        <Label htmlFor="deskripsi">Deskripsi</Label>
+        <Textarea
+          id="deskripsi"
+          name="deskripsi"
+          rows={2}
+          defaultValue={data.deskripsi || ""}
+          placeholder="Deskripsi singkat proyek"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="fitur">Fitur Proyek</Label>
+        <Textarea
           id="fitur"
           name="fitur"
-          defaultValue={proyek?.fitur?.join("\n") || ""}
-          rows={4}
+          rows={3}
+          defaultValue={data.fitur?.join("\n") || ""}
           placeholder="Satu fitur per baris"
-          className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
         />
       </div>
 
-      <div>
-        <label
-          htmlFor="gambar_url"
-          className="mb-1 block text-sm font-semibold text-gray-800 dark:text-white"
-        >
-          URL Gambar
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="gambar_url">URL Gambar</Label>
+        <Input
           id="gambar_url"
           name="gambar_url"
-          defaultValue={proyek?.gambar_url || ""}
-          className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+          defaultValue={data.gambar_url || ""}
+          placeholder="/proyek/proyek-buku-tamu.png"
         />
       </div>
 
-      <div className="flex flex-wrap gap-3 pt-2">
-        <button
-          type="submit"
-          className="rounded-lg bg-[#1D3557] px-5 py-3 font-semibold text-white transition hover:bg-blue-900"
-        >
-          {sedangEdit ? "Simpan Proyek" : "Tambah Proyek"}
-        </button>
+      {state.error && (
+        <p className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-600 dark:bg-red-950/40 dark:text-red-300">
+          {state.error}
+        </p>
+      )}
 
-        {sedangEdit && (
-          <Link
-            href="/kelola"
-            className="rounded-lg border border-gray-300 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-100 dark:border-slate-600 dark:text-white dark:hover:bg-slate-800"
-          >
-            Batal
-          </Link>
-        )}
+      <div className="flex flex-wrap gap-3 pt-2">
+        <TombolKirim teks={teksTombol} />
+
+        <Link
+          href="/kelola"
+          className="inline-flex items-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100 dark:border-slate-600 dark:text-white dark:hover:bg-slate-800"
+        >
+          Batal
+        </Link>
       </div>
     </form>
   );

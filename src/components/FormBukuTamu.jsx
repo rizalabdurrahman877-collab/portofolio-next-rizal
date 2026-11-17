@@ -28,8 +28,8 @@ export default function FormBukuTamu() {
 
   return (
     <form action={formAction} className="space-y-4">
-      <div>
-        <label htmlFor="nama" className="mb-1 block text-sm font-medium">
+      <div className="space-y-2">
+        <label htmlFor="nama" className="block text-sm font-medium">
           Nama
         </label>
 
@@ -39,11 +39,12 @@ export default function FormBukuTamu() {
           placeholder="Masukkan nama"
           value={nama}
           onChange={(e) => setNama(e.target.value)}
+          required
         />
       </div>
 
-      <div>
-        <label htmlFor="pesan" className="mb-1 block text-sm font-medium">
+      <div className="space-y-2">
+        <label htmlFor="pesan" className="block text-sm font-medium">
           Pesan
         </label>
 
@@ -51,12 +52,15 @@ export default function FormBukuTamu() {
           id="pesan"
           name="pesan"
           placeholder="Tulis pesanmu"
+          rows={4}
+          maxLength={300}
           value={pesan}
           onChange={(e) => setPesan(e.target.value)}
+          required
         />
       </div>
 
-      <TombolKirim />
+      <TombolKirim teks="Kirim Pesan" />
 
       {state.error && (
         <p className="text-sm font-medium text-red-600">{state.error}</p>

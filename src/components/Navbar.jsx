@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation";
 import TombolTema from "@/components/TombolTema";
 
 const menu = [
-  { nama: "Beranda", href: "/" },
-  { nama: "Tentang", href: "/tentang" },
-  { nama: "Proyek", href: "/proyek" },
-  { nama: "Buku Tamu", href: "/buku-tamu" },
-  { nama: "Kontak", href: "/kontak" },
+  { href: "/", label: "Beranda" },
+  { href: "/tentang", label: "Tentang" },
+  { href: "/proyek", label: "Proyek" },
+  { href: "/buku-tamu", label: "Buku Tamu" },
+  { href: "/kontak", label: "Kontak" },
 ];
 
 export default function Navbar() {
